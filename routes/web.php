@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\AttendanceController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+
+Route::get('/attendance', [AttendanceController::class, 'index']);
+Route::post('/attendance/store', [AttendanceController::class, 'store']);
+Route::get('/employee/attendance/{employee_id}', [AttendanceController::class, 'AttendanceInformation']);
+
+// Add other routes as needed
