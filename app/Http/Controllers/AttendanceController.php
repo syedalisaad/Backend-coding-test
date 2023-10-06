@@ -63,12 +63,10 @@ class AttendanceController extends Controller
             ->get();
 
 
-        $totalWorkingHours = $this->calculateTotalWorkingHours($attendances);
 
 
         return response()->json([
-            'attendances' => $attendances,
-            'total_working_hours' => $totalWorkingHours,
+            $attendances
         ]);
     }
 
@@ -90,28 +88,79 @@ class AttendanceController extends Controller
         return $totalHours;
     }
 
+     /**
+     * @OA\Get(
+     *     path="/attendance",
+     *     summary="Get a list of all attendance records",
+     *     tags={"Attendance"},
+     *     operationId="index",
 
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error"
+     *     )
+     * )
+     *
+     * Display a listing of the attendance records.
+     *
+     * @return \Illuminate\Http\Response
+     */
 
     public function index()
     {
-        // Implement the logic to display attendance records
+        $attendances = Attendance::all();
+        return response()->json($attendances, 200);
     }
-
+ /**
+     * @OA\Post(
+     *     path="/api/attendance",
+     *     summary="Import attendance data from an Excel file",
+     *     tags={"Attendance"},
+     *     operationId="store",
+     *     @OA\RequestBody(
+     *         description="Excel file to import",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="file",
+     *                     type="file",
+     *                     description="The Excel file to import",
+     *                 ),
+     *             ),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Attendance data imported successfully",
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *     ),
+     * )
+     *
+     * Import attendance data from an Excel file.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
         $request->validate([
             'file' => 'required|file|mimes:xls,xlsx',
         ]);
-          // Process the uploaded file
-    $file = $request->file('file');
-    Excel::import(new AttendanceImport, $file);
+        // Process the uploaded file
+        $file = $request->file('file');
+        Excel::import(new AttendanceImport, $file);
 
-    $this->attendanceService->storeAttendance($request->all());
-    // Use Laravel Excel to import data from the file using the AttendanceImport class
+        $this->attendanceService->storeAttendance($request->all());
+        // Use Laravel Excel to import data from the file using the AttendanceImport class
 
 
-    // Return a response indicating success
-    return response()->json(['message' => 'Attendance data imported successfully']);
-}
+        // Return a response indicating success
+        return response()->json(['message' => 'Attendance data imported successfully']);
+    }
 
 }

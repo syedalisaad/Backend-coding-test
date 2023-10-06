@@ -55,6 +55,54 @@
                     }
                 }
             }
+        },
+        "/attendance": {
+            "get": {
+                "tags": [
+                    "Attendance"
+                ],
+                "summary": "Get a list of all attendance records",
+                "operationId": "index",
+                "responses": {
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/attendance": {
+            "post": {
+                "tags": [
+                    "Attendance"
+                ],
+                "summary": "Import attendance data from an Excel file",
+                "operationId": "store",
+                "requestBody": {
+                    "description": "Excel file to import",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "file": {
+                                        "description": "The Excel file to import",
+                                        "type": "file"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Attendance data imported successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
         }
     }
 }
