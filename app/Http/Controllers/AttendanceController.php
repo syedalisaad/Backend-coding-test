@@ -1,10 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\HumanResources\Attendance\Application\AttendanceService;
 use App\HumanResources\Attendance\Domain\Attendance;
+use App\Imports\AttendanceImport;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AttendanceController extends Controller
 {
@@ -44,24 +47,6 @@ class AttendanceController extends Controller
      *         required=true,
      *         description="End date (YYYY-MM-DD)",
      *         @OA\Schema(type="string", format="date")
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Successful operation",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(
-     *                 property="attendances",
-     *                 type="array",
-     *                 @OA\Items(ref="#/components/schemas/Attendance")
-     *             ),
-     *             @OA\Property(
-     *                 property="total_working_hours",
-     *                 type="number",
-     *                 format="float",
-     *                 description="Total working hours for the specified date range"
-     *             )
-     *         )
      *     ),
      *     @OA\Response(
      *         response=404,
@@ -106,7 +91,7 @@ class AttendanceController extends Controller
     }
 
 
-    
+
     public function index()
     {
         // Implement the logic to display attendance records
@@ -114,7 +99,19 @@ class AttendanceController extends Controller
 
     public function store(Request $request)
     {
-        // Implement the logic to store attendance records
-        $this->attendanceService->storeAttendance($request->all());
-    }
+        $request->validate([
+            'file' => 'required|file|mimes:xls,xlsx',
+        ]);
+          // Process the uploaded file
+    $file = $request->file('file');
+    Excel::import(new AttendanceImport, $file);
+
+    $this->attendanceService->storeAttendance($request->all());
+    // Use Laravel Excel to import data from the file using the AttendanceImport class
+
+
+    // Return a response indicating success
+    return response()->json(['message' => 'Attendance data imported successfully']);
+}
+
 }

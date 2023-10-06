@@ -19,4 +19,7 @@ Route::get('/attendance', [AttendanceController::class, 'index']);
 Route::post('/attendance/store', [AttendanceController::class, 'store']);
 Route::get('/employee/attendance/{employee_id}', [AttendanceController::class, 'AttendanceInformation']);
 
+Route::post('attendance/upload', [AttendanceController::class, 'store'] );
+
+
 // Add other routes as needed
