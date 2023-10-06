@@ -10,6 +10,7 @@
 
 </head>
 <body>
-    <div id="react-app"></div>
+    <div id="challenge-1"></div>
+    <div id="challenge-2"></div>
 </body>
 </html>
