@@ -23,6 +23,7 @@ Route::get('/employee/attendance/{employee_id}', [AttendanceController::class, '
 
 Route::post('attendance/upload', [AttendanceController::class, 'store'] );
 
+Route::get('/group-by-owners', [AttendanceController::class, 'groupByOwners']);
 
 
 // Add other routes as needed

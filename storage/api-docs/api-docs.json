@@ -103,6 +103,48 @@
                     }
                 }
             }
+        },
+        "/group-by-owners": {
+            "get": {
+                "tags": [
+                    "group-by-owners"
+                ],
+                "summary": "Group files by owners",
+                "operationId": "988e345f118b40e1c00ff63eaf46d23c",
+                "requestBody": {
+                    "description": "Input data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "insurance.txt": {
+                                        "type": "string",
+                                        "example": "Company A"
+                                    },
+                                    "letter.docx": {
+                                        "type": "string",
+                                        "example": "Company A"
+                                    },
+                                    "Contract.docx": {
+                                        "type": "string",
+                                        "example": "Company B"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": " successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
         }
     }
 }

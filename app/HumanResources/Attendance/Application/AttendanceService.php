@@ -11,6 +11,19 @@ class AttendanceService
 
     Attendance::create($data);
     }
+    public static function groupByOwnersService($files)
+    {
+        $groupedData = [];
 
+        foreach ($files as $file => $owner) {
+            if (!isset($groupedData[$owner])) {
+                $groupedData[$owner] = [];
+            }
+
+            $groupedData[$owner][] = $file;
+        }
+
+        return $groupedData;
+    }
 }
 

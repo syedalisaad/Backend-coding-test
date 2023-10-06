@@ -88,30 +88,30 @@ class AttendanceController extends Controller
         return $totalHours;
     }
 
-     /**
-     * @OA\Get(
-     *     path="/attendance",
-     *     summary="Get a list of all attendance records",
-     *     tags={"Attendance"},
-     *     operationId="index",
+    /**
+    * @OA\Get(
+    *     path="/attendance",
+    *     summary="Get a list of all attendance records",
+    *     tags={"Attendance"},
+    *     operationId="index",
 
-     *     @OA\Response(
-     *         response=500,
-     *         description="Internal server error"
-     *     )
-     * )
-     *
-     * Display a listing of the attendance records.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    *     @OA\Response(
+    *         response=500,
+    *         description="Internal server error"
+    *     )
+    * )
+    *
+    * Display a listing of the attendance records.
+    *
+    * @return \Illuminate\Http\Response
+    */
 
     public function index()
     {
         $attendances = Attendance::all();
         return response()->json($attendances, 200);
     }
- /**
+    /**
      * @OA\Post(
      *     path="/api/attendance",
      *     summary="Import attendance data from an Excel file",
@@ -161,6 +161,42 @@ class AttendanceController extends Controller
 
         // Return a response indicating success
         return response()->json(['message' => 'Attendance data imported successfully']);
+    }
+    /**
+     * @OA\Get(
+     *     path="/group-by-owners",
+     *     summary="Group files by owners",
+     *     tags={"group-by-owners"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Input data",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="insurance.txt", type="string", example="Company A"),
+     *             @OA\Property(property="letter.docx", type="string", example="Company A"),
+     *             @OA\Property(property="Contract.docx", type="string", example="Company B"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description=" successfully",
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *     ),
+     *     ),
+     * )
+     */
+
+    public function groupByOwners(Request $request)
+    {
+
+        $inputFiles = $request->json()->all();
+
+        $groupedData = AttendanceService::groupByOwnersService($inputFiles);
+
+        return response()->json($groupedData);
     }
 
 
