@@ -16,3 +16,7 @@ API documentation is available via Swagger. You can access the API documentation
 Swagger API Documentation
 
 http://127.0.0.1:8000/api/documentation
+
+
+Challenge 2:
+Is in DuplicateFinder.jsx file
